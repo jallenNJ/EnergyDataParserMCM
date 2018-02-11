@@ -50,6 +50,18 @@ double* InputHandler::parseInput(string userInput) {
 		}
 		parser >> buff;
 		return normilizeData(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
+	} else if (command == "avg") { //Gets a set of data and averages it
+		int args[3];
+		for (int i = 0; i < 3; i++) {
+			parser >> buff;
+			if (buff == "") {
+				cerr << "Invalid args, returning NULL";
+				return NULL;
+			}
+			args[i] = stoi(buff);
+		}
+		parser >> buff;
+		return averageData(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
 	}
 	else {
 		cerr << "Invalid command" << endl;
@@ -146,4 +158,28 @@ double* InputHandler::getDataRange(int state, int startYear, int stopYear, int s
 		arr[j] = allStates[state].getData(startYear + i, code);
 	}
 	return arr;
+}
+
+double* InputHandler::averageData(int state, int startYear, int stopYear, int step, int code) {
+	double * data = getDataRange(state, startYear, stopYear, step, code);
+	if (data == NULL) {
+		return NULL;
+	}
+
+	int arrSize = data[0];
+
+	double* result = new double[2];
+	double total = 0;
+	//Scope block to make the i variable last through the loop, the average, then leave scope
+	{
+		int i;
+		for (i = 1; i < arrSize; i++) {
+			total += data[i];
+		}
+		result[0] = 2;
+		result[1] = total / (i -1);
+	}
+	return result;
+
+
 }
