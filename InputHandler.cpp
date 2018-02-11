@@ -74,7 +74,6 @@ void InputHandler::runScript() {
 
 			for (int i = 1; i < (int)dataReturned[0]; i++) {
 				output << dataReturned[i] << ", ";
-				cout << "DD is " << dataReturned[i] << endl;
 			}
 			output << " ]\n";
 
@@ -101,7 +100,6 @@ double* InputHandler::getDataRange(int state, int startYear, int stopYear, int s
 	arr[0] = (range / step)  + 1;
 	for (int i = 0, j = 1; i < range; i+= step, j++) {
 		arr[j] = allStates[state].getData(startYear + i, code);
-		cout << "Recovered value " << arr[j] << endl;
 	}
 	return arr;
 }

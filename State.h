@@ -17,27 +17,28 @@ class State {
 public:
 	State() {
 		//Initializing all values in the dataByCode arrays to 0
-		std::cout << "Starting state intilization" << std::endl;
 		for (int i = 0; i < YEARS; i++) {
 			for (int j = 0; j < TOTALCODES; j++) {
 				stateData[i].dataByCode[j] = 0;
 			}
 		}
-		std::cout << "Done" << std::endl;
-	}
-	State(int s) {
-		//Initializing all values in the dataByCode arrays to 0
-		std::cout << "Starting state intilization" << std::endl;
-		for (int i = 0; i < YEARS; i++) {
-			for (int j = 0; j < TOTALCODES; j++) {
-				stateData[i].dataByCode[j] = 0;
-			}
+		for (int i = 0; i < YEARS / 10; i++) {
+			population[i] = 1;
 		}
-		std::cout << "Done" << std::endl;
+
 	}
+
 
 	void setState(int s) {
 		state = s;
+	}
+
+	void setPopulation(int i, int pop) {
+
+		population[i] = pop;
+	}
+	int getPopulation(int i) {
+		return population[i];
 	}
 
 	//Adding a single data point to the array at [year] and [dataByCode]
@@ -52,6 +53,7 @@ public:
 
 private:
 	yearData stateData[YEARS];
+	int population[(YEARS / 10) + 1];
 	int state; //(State is an int because state is an ENUM)
 };
 

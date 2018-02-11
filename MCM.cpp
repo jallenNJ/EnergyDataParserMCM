@@ -11,6 +11,7 @@
 
 
 void readInFile(State*);
+void readInPopulation(State*);
 
 using namespace std;
 int main() {
@@ -22,7 +23,11 @@ int main() {
 	for (int i = 0; i < STATES; i++) {
 		allStates[i].setState(i);
 	}
+
+	cout << "Loading in files..." << endl;
 	readInFile(allStates);
+	readInPopulation(allStates);
+	cout << "All files loaded" << endl;
 	string buff = "";
 	InputHandler user(allStates);
 	while (true) {
@@ -56,7 +61,6 @@ void readInFile(State* allStates) {
 	string lineBuff = "";			//Buffer for the current line of the file
 	string buff = "";				//Buffer for the current token
 
-	int lineCount = 0;				//Amount of lines read
 		//The Code for the current line
 	bool lookingForPeriod = true;	//Flag for if the token found
 	
@@ -95,10 +99,50 @@ void readInFile(State* allStates) {
 		int year = stoi(buff);
 		parser >> buff;	//Data
 		allStates[state].addData(year, i, stod(buff));
-		lineCount++;
 
 	}
 
-	cout << "Read " << lineCount << "lines";
+
+}
+
+void readInPopulation(State* allStates) {
+	ifstream dataReader;
+	dataReader.open("population.txt");
+	//Ensure file is open
+	if (!dataReader) {
+		cerr << "Failed to open";
+		system("pause");
+		exit(-1);
+	}
+	EnumResolver em;				//Access Enums
+	string lineBuff = "";			//Buffer for the current line of the file
+	string buff = "";				//Buffer for current token
+
+	int dataPoints = YEARS / 10;	//Amount of entries
+	int currentState = 0;			//Int of current state to add to
+
+	while (!dataReader.eof()) {
+		buff = "";				//Set buff to blank (So new lines don't break reading)
+		//Get line
+		getline(dataReader, lineBuff);
+		istringstream parser(lineBuff);
+		parser >> buff; 
+
+		//If empty, its an empty line, if value, its a header for a state
+		if (buff == "") {
+			continue;
+		}
+		currentState = em.stateNameToEnum(buff);
+
+		for (int i = (YEARS / 10); i >= 0; i--) { //Load in populatin data for the state, newest first
+			getline(dataReader, lineBuff);
+			istringstream parser(lineBuff);
+			parser >> buff;
+			parser >> buff;
+			allStates[currentState].setPopulation(i, stoi(buff));
+		}
+
+
+	}
 
 }
