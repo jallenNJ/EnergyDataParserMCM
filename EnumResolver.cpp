@@ -44,6 +44,8 @@ std::string EnumResolver::stateEnumToName(int input) {
 	}
 }
 
+
+//Take the string of enum and convert to the number
 int EnumResolver::codeNameToEnum(std::string input) {
 	if (input == "ABICB") {
 		return ABICB;
@@ -1801,7 +1803,7 @@ int EnumResolver::codeNameToEnum(std::string input) {
 	}
 }
 
-
+//Take the enum value and get the string back
 std::string EnumResolver::codeEnumToName(int input) {
 	switch (input) {
 	case ABICB:

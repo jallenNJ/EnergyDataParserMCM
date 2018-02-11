@@ -1,6 +1,9 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 //const char* FIRSTCODE = "ABICB";
+
+
+//All Codes in file
 enum codes {
 	ABICB = 0, ABICP, ARICB, ARICD, ARICP, ARICV, ARTCB, ARTCD, ARTCP, ARTCV, ARTXB, ARTXD, ARTXP,
 	ARTXV, AVACB, AVACD, AVACP, AVACV, AVTCB, AVTCD, AVTCP, AVTCV, AVTXB, AVTXD, AVTXP, AVTXV, BMTCB, CLACB,
@@ -43,7 +46,7 @@ enum codes {
 	WWISB, WWIXB, WWTCB, WWTCD, WWTCV, WWTXB, WWTXD, WWTXV, WXICB, WXICD, WXICP, WXICV, WYEGB, WYEGP, WYTCB,
 };
 
-
+//States
 enum state { AZ = 0, CA, NM, TX };
 #endif // !ENUMS_H
 

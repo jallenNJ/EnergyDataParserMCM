@@ -17,19 +17,22 @@ using namespace std;
 int main() {
 	
 	
-	EnumResolver em;
+	EnumResolver em; //Use of enums
 	State allStates[STATES]; //Declaring allStates, and instance of the States class, with the size of STATES
-							 //Assigning the states to their ENUM
+	//Assigning the states to their ENUM
 	for (int i = 0; i < STATES; i++) {
 		allStates[i].setState(i);
 	}
 
+	//Read in the files
 	cout << "Loading in files..." << endl;
 	readInFile(allStates);
 	readInPopulation(allStates);
 	cout << "All files loaded" << endl;
 	string buff = "";
 	InputHandler user(allStates);
+
+	//Forever loop to get user input
 	while (true) {
 		buff = "";
 		cout << "Enter command to run" << endl;
@@ -39,8 +42,6 @@ int main() {
 
 	}
 
-
-	//allStates[em.stateNameToEnum("TX")].getData(1983, codeNameToEnum("AVTCB"));
 	system("pause");
 	return 0;
 }

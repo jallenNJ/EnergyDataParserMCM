@@ -3,15 +3,10 @@
 
 using namespace std;
 
-//enter state, start year. range, step, 
-//output to console or file?
-//return an array of doubles
-
-
-//add script function
-
 //<Command> [State][args]
+//This function parses the raw console input to figure out what the user wants to do
 double* InputHandler::parseInput(string userInput) {
+
 	istringstream parser(userInput);
 	void* returnVal = NULL;
 	string command = "";
@@ -23,9 +18,7 @@ double* InputHandler::parseInput(string userInput) {
 		stateNum = em.stateNameToEnum(buff);
 	}
 	
-
-
-	if (command == "datarange") {
+	if (command == "datarange") { //Gets a range of data
 		int args[3];
 		for (int i = 0; i < 3; i++) {
 			parser >> buff;
@@ -39,13 +32,13 @@ double* InputHandler::parseInput(string userInput) {
 
 		return getDataRange(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
 	}
-	else if (command == "exit") {
+	else if (command == "exit") { //Exits the program
 		exit(0);
 	}
-	else if (command == "script") {
+	else if (command == "script") { //Executes a script
 		runScript();
 	}
-	else if (command == "percap") {
+	else if (command == "percap") { //Gets a set of data and normilizes it per capita
 		int args[3];
 		for (int i = 0; i < 3; i++) {
 			parser >> buff;
@@ -68,20 +61,24 @@ double* InputHandler::parseInput(string userInput) {
 
 
 void InputHandler::runScript() {
+	//Get and open script
 	ifstream script;
 	script.open("script.txt");
 	if (!script) {
 		cerr << "Failed to open script" << endl;
 		return;
 	}
+	//Set up output file
 	ofstream output;
 	output.open("scriptOutput.txt");
 	string line = "";
 	double * dataReturned = NULL;
+
+
 	//IDEA: Script instructions on first line? 
 	while (!script.eof()) {
-		getline(script, line);
-		dataReturned = parseInput(line);
+		getline(script, line);				//Get the line of data
+		dataReturned = parseInput(line);	//  execute based on how it works
 		if (dataReturned != NULL) {
 			output << "[ ";
 
@@ -98,7 +95,7 @@ void InputHandler::runScript() {
 }
 
 double* InputHandler::normilizeData(int state, int startYear, int stopYear, int step, int code) {
-
+	//Get the data
 	double * data = getDataRange(state, startYear, stopYear, step, code);
 	if (data == NULL) {
 		return NULL;
@@ -107,17 +104,18 @@ double* InputHandler::normilizeData(int state, int startYear, int stopYear, int 
 	int arrSize = data[0];
 
 
-	int yearsTilPopChange = 10 - startYear % 10;
-	int popIndex = (startYear - 1960) / 10;
-	double* normData = new double[arrSize];
-	normData[0] = arrSize;
+	int yearsTilPopChange = 10 - startYear % 10; //Figure out how long until the nearest year with a census
+	int popIndex = (startYear - 1960) / 10;		//Index to the pop array
+	double* normData = new double[arrSize];			//Array to store output
+	normData[0] = arrSize;							//Cache size of array for when its returned
 	double current = 0;
 	for (int i = 1; i < arrSize; i++) {
-		if (yearsTilPopChange <= 0) {
+		if (yearsTilPopChange <= 0) {		//If new census, reset counter and incrment index
 			yearsTilPopChange = 10;
 			popIndex++;
 		}
 		
+		//Get data, get per person, then multiply by 100000
 		current = data[i];
 		current /= allStates[state].getPopulation(popIndex);
 		current *= 100000;
@@ -128,17 +126,20 @@ double* InputHandler::normilizeData(int state, int startYear, int stopYear, int 
 }
 
 double* InputHandler::getDataRange(int state, int startYear, int stopYear, int step, int code) {
-
+	//Makes sure all values are postive
 	if (state < 0 || startYear < 0 || stopYear < 0 || step < 0 || code < 0) {
 		cerr << "Invalid entry to get data Range, returning null" << endl;
 		cerr << "State:" << state << " startYear: " << startYear << " range:" << stopYear << " step:" << step << " code: " << code <<endl;
 		return NULL;
 	}
+	//Get the range of data and make sure its postive
 	int range = stopYear - startYear;
 	if (range < 0) {
 		cerr << "Stop year before start year, returning NULL";
 
 	}
+
+	//Read in the values
 	double * arr = new double[(range / step) +1];
 	arr[0] = (range / step)  + 1;
 	for (int i = 0, j = 1; i < range; i+= step, j++) {
