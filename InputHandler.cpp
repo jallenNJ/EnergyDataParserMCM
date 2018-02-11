@@ -63,6 +63,19 @@ double* InputHandler::parseInput(string userInput) {
 		parser >> buff;
 		return averageData(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
 	}
+	else if (command == "rchange") { //Gets a set of data and averages it
+		int args[3];
+		for (int i = 0; i < 3; i++) {
+			parser >> buff;
+			if (buff == "") {
+				cerr << "Invalid args, returning NULL";
+				return NULL;
+			}
+			args[i] = stoi(buff);
+		}
+		parser >> buff;
+		return realtiveChange(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
+	}
 	else {
 		cerr << "Invalid command" << endl;
 		return NULL;
@@ -180,6 +193,27 @@ double* InputHandler::averageData(int state, int startYear, int stopYear, int st
 		result[1] = total / (i -1);
 	}
 	return result;
+
+}
+
+
+//Code isn't fully debugged. Pushed early as per groups request
+double* InputHandler::realtiveChange(int state, int startYear, int stopYear, int step, int code) {
+	double * data = getDataRange(state, startYear, stopYear, step, code);
+	if (data == NULL) {
+		return NULL;
+	}
+
+	int arrSize = data[0];
+
+	double* result = new double[arrSize];
+	result[0] = data[0];
+	result[1] = 0;
+	for (int i = 2; i < arrSize; i++) {
+		result[i] = data[i] - data[i - 1];
+	}
+	return result;
+
 
 
 }

@@ -21,6 +21,8 @@ private:
 	double* getDataRange(int, int, int, int, int);
 	double* normilizeData(int, int, int, int, int);
 	double* averageData(int, int, int, int, int);
+	double* realtiveChange(int, int, int, int, int);
+	int* parseStandardArgs(istringstream*);
 
 	void runScript();
 };
