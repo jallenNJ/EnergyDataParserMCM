@@ -19,6 +19,7 @@ private:
 	EnumResolver em;
 	State* allStates;
 	double* getDataRange(int, int, int, int, int);
+	double* normilizeData(int, int, int, int, int);
 	void runScript();
 };
 

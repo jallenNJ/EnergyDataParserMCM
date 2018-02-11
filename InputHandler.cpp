@@ -45,6 +45,19 @@ double* InputHandler::parseInput(string userInput) {
 	else if (command == "script") {
 		runScript();
 	}
+	else if (command == "percap") {
+		int args[3];
+		for (int i = 0; i < 3; i++) {
+			parser >> buff;
+			if (buff == "") {
+				cerr << "Invalid args, returning NULL";
+				return NULL;
+			}
+			args[i] = stoi(buff);
+		}
+		parser >> buff;
+		return normilizeData(stateNum, args[0], args[1], args[2], em.codeNameToEnum(buff));
+	}
 	else {
 		cerr << "Invalid command" << endl;
 		return NULL;
@@ -81,6 +94,36 @@ void InputHandler::runScript() {
 	}
 
 
+
+}
+
+double* InputHandler::normilizeData(int state, int startYear, int stopYear, int step, int code) {
+
+	double * data = getDataRange(state, startYear, stopYear, step, code);
+	if (data == NULL) {
+		return NULL;
+	}
+
+	int arrSize = data[0];
+
+
+	int yearsTilPopChange = 10 - startYear % 10;
+	int popIndex = (startYear - 1960) / 10;
+	double* normData = new double[arrSize];
+	normData[0] = arrSize;
+	double current = 0;
+	for (int i = 1; i < arrSize; i++) {
+		if (yearsTilPopChange <= 0) {
+			yearsTilPopChange = 10;
+			popIndex++;
+		}
+		
+		current = data[i];
+		current /= allStates[state].getPopulation(popIndex);
+		current *= 100000;
+		normData[i] = current;
+	}
+	return normData;
 
 }
 
