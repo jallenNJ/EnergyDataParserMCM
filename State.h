@@ -42,9 +42,6 @@ public:
 
 	//Adding a single data point to the array at [year] and [dataByCode]
 	void addData(int year, int code, double dataToAdd) {
-		if (code > 550) {
-			std::cout << "Adding " << dataToAdd << " to code " << code << " at year " << year << " to state " << state << std::endl;
-		}
 
 		stateData[year - 1960].dataByCode[code] = dataToAdd;
 	}

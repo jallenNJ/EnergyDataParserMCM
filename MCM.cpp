@@ -6,7 +6,7 @@
 #include "Enums.h"
 #include "State.h"
 #include "EnumResolver.h"
-
+#include "InputHandler.h"
 
 
 
@@ -23,8 +23,18 @@ int main() {
 		allStates[i].setState(i);
 	}
 	readInFile(allStates);
-//Open the file;
-	
+	string buff = "";
+	InputHandler user(allStates);
+	while (true) {
+		buff = "";
+		cout << "Enter command to run" << endl;
+		//cin >> buff;
+		getline(cin, buff);
+		user.parseInput(buff);	
+
+	}
+
+
 	//allStates[em.stateNameToEnum("TX")].getData(1983, codeNameToEnum("AVTCB"));
 	system("pause");
 	return 0;
